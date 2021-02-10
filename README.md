@@ -1,5 +1,5 @@
 # Multi-resolution Texture Synthesis with CNN
-
+![teaser](asser/Synthesis.PNG)
 Code to reproduce synthesis results of our multi-resolution texture synthesis with CNN. This repository is associated to the research paper: [High resolution neural texture synthesis with long range constraints](https://arxiv.org/abs/2008.01808) with [Nicolas Gonthier](https://perso.telecom-paristech.fr/gonthier/), [Yann Gousseau](https://perso.telecom-paristech.fr/gousseau/) and [Saïd Ladjal](https://perso.telecom-paristech.fr/ladjal/)
 
 **tl;dr** 
