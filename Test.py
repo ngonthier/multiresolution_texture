@@ -1,11 +1,15 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb 24 20:00:30 2021
+Created on Wed 24 February 2021
 
-@author: gonthier
+The goal of this script is just to run a test after a new installation of
+the project 
+
+@author: nicolas
 """
 
-import Style_Transfer as st
+import Run_synthesis as rs
 from Arg_Parser import get_parser_args 
 
 max_iter = 1000
@@ -13,40 +17,36 @@ print_iter = 200
 
 def testTexture():
     parser = get_parser_args()
-    name_texture = 'TilesOrnate0158_1_S'
-    output_img_name = name_texture + '_Gatys'
+    name_texture = 'TilesOrnate0158_1_S' # Image in size 256*256
+    output_img_name = name_texture + '_Gram'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
-        style_img_name=name_texture,loss=['texture'],output_img_name=output_img_name) 
+        style_img_name=name_texture,loss=['Gram'],output_img_name=output_img_name) 
     args = parser.parse_args()
-    st.style_transfer(args)
-    print('End of the texture test')
+    rs.run_synthesis(args)
+    print('End of the texture test with Gram Matrices')
     
 def testTextureAucorr():
     parser = get_parser_args()
-    name_texture = 'TilesOrnate0158_1_S'
+    name_texture = 'TilesOrnate0158_1_S' # Image in size 256*256
     output_img_name = name_texture + '_autocorr'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
         style_img_name=name_texture,loss=['autocorr'],output_img_name=output_img_name) 
     args = parser.parse_args()
-    st.style_transfer(args)
+    rs.run_synthesis(args)
     print('End of the autocorr texture test')
-    
-def testStyleTransfer():
+  
+def testTextureMSInit():
     parser = get_parser_args()
-    name_style = 'Hokusai_GreatWave_crop'
-    name_content = 'Louvre'
-    output_img_name = name_content +'_with_style_' + name_style
-    init_noise_ratio = 0.1
+    name_texture = 'TexturesCom_TilesOrnate0158_1_seamless_S' # Image in size 1024*1024
+    output_img_name = name_texture + '_Gram_Spectrum_MSInit'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
-        style_img_name=name_style,content_img_name=name_content,\
-        loss=['texture','content'],output_img_name=output_img_name,\
-        init_noise_ratio=init_noise_ratio) 
+        style_img_name=name_texture,loss=['Gram','spectrum'],
+        output_img_name=output_img_name,MS_Strat='MSInit') 
     args = parser.parse_args()
-    st.style_transfer(args)
-    print('End of the Style Transfer test')
-
+    rs.run_synthesis(args)
+    print('End of the autocorr texture test')
 
 if __name__ == '__main__':
     testTexture()
     testTextureAucorr()
-    testStyleTransfer()
+    testTextureMSInit()

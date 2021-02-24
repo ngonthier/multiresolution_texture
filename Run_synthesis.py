@@ -16,18 +16,13 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='0' # 1 to remove info, 2 to remove warning a
 import os.path
 import tensorflow as tf
 import scipy.io
-from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 import pickle
 import math
-from tensorflow.python.client import timeline
 from Arg_Parser import get_parser_args 
-import utils
-from numpy.fft import fft2, ifft2
 from skimage.color import gray2rgb
-import Misc
 import cv2
 from shutil import copyfile
 from functools import partial
@@ -713,7 +708,7 @@ def load_img(args,img_name,scale=None):
     try:
         img = scipy.misc.imread(image_path)  # Float between 0 and 255
     except IOError:
-        if(args.debug): print("Exception when we try to open the image, try with a different extension format",str(args.img_ext))
+        if(args.verbose): print("Exception when we try to open the image, try with a different extension format",str(args.img_ext))
         if(args.img_ext=="jpg"):
             new_img_ext = "png"
         elif(args.img_ext=="png"):
@@ -721,12 +716,12 @@ def load_img(args,img_name,scale=None):
         try:
             image_path = args.img_folder + img_name+'.' +new_img_ext # Try the new path
             img = scipy.misc.imread(image_path,mode='RGB')
-            if(args.debug): print("The image have been sucessfully loaded with a different extension than",str(args.img_ext))
+            if(args.verbose): print("The image have been sucessfully loaded with a different extension than",str(args.img_ext))
         except IOError:
             try:
                 image_path = args.img_folder + img_name # Try the new path
                 img = scipy.misc.imread(image_path,mode='RGB')
-                if(args.debug): print("The image have been sucessfully loaded without extension")
+                if(args.verbose): print("The image have been sucessfully loaded without extension")
             except IOError:
                 if(args.verbose): print("Exception when we try to open the image, we already test the 2 differents extension and without it.")
                 raise
@@ -844,7 +839,7 @@ def run_synthesis(args):
     _,image_h_first, image_w_first, number_of_channels = image_texture_first.shape
         
     if args.MS_Strat in ['Init','Constr']:
-        if args.debug: print("I would like to warm you up that the resize from TF I use are not really good :( Sorry")
+        if args.verbose: print("I would like to warm you up that the resize function from TF I is not the best one.")
         if not(image_h_first%args.MS_minscale==0) or not(image_w_first%args.MS_minscale==0):
             if args.verbose: print('It seems that the scale is not divised by the args.MS_minscale we will deal with it for the last scale')
         if image_h_first < args.MS_minscale:
