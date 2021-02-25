@@ -57,8 +57,8 @@ def get_parser_args():
         help='Name of the data folder')
     
     # Extension of the image
-    parser.add_argument('--img_ext',  type=str,default='.png',
-        choices=['.jpg','.png'],help='Extension of the image') 
+    parser.add_argument('--img_ext',  type=str,default='png',
+        choices=['jpg','png'],help='Extension of the image') 
     #TODO : remove the '.' that cannot be read in command line 
         
     # Infomartion about the optimization

@@ -9,8 +9,9 @@ strategy
 Inspired from https://github.com/cysmith/neural-style-tf/blob/master/neural_style.py
 and https://github.com/leongatys/PytorchNeuralStyleTransfer/blob/master/NeuralStyleTransfer.ipynb
 
-@author: nicolas
+@author: Gonthier Nicolas
 """
+
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='0' # 1 to remove info, 2 to remove warning and 3 for all
 import os.path
@@ -28,6 +29,8 @@ from shutil import copyfile
 from functools import partial
 import pathlib
 import urllib
+
+
 
 # Name of the 19 first layers of the VGG19
 VGG19_LAYERS = (
@@ -47,14 +50,28 @@ VGG19_LAYERS = (
 used_layers_size =  {'input':3,'conv1' : 64,'relu1' : 64,'pool1': 64,'conv2' : 128,'relu2' : 128,'pool2':128,'conv3' : 256,'relu3' : 256,'pool3':256,'conv4': 512,'relu4' : 512,'pool4':512,'conv5' : 512,'relu5' : 512,'pool5':512}
 
 
-def test_version_sup(version_str):
+def test_version_tf_sup(version_str):
     version_str_tab = version_str.split('.')
-    tf_version_teb =  tf.__version__.split('.')
+    tf_version_tab =  tf.__version__.split('.')
     status = False
-    for a,b in zip(tf_version_teb,version_str_tab):
+    for a,b in zip(tf_version_tab,version_str_tab):
         if float(a) > float(b):
             status = True
     return(status)
+    
+def test_version_scipy_sup(version_str):
+    version_str_tab = version_str.split('.')
+    scipy_version_tab =  scipy.__version__.split('.')
+    status = False
+    for a,b in zip(scipy_version_tab,version_str_tab):
+        if float(a) > float(b):
+            status = True
+    return(status)
+    
+if test_version_scipy_sup('1.2.0'):
+    from scipy.imageio import imread
+else:
+    from scipy.misc import imread
 
 def download_weights(VGG19_mat,verbose=False):
     """
@@ -331,14 +348,14 @@ def loss_spectrum(sess,net,image_texture,M_dict,beta,eps = 0.001):
     F_x = tf.fft2d(tf.complex(x_t,0.)) # Image en cours de synthese 
     
     # Element wise multiplication of FFT and conj of FFT
-    if not(test_version_sup('1.7')):
+    if not(test_version_tf_sup('1.7')):
         innerProd = tf.reduce_sum(tf.multiply(F_x,tf.conj(F_a)), 1, keep_dims=True)  # sum(ftIm .* conj(ftRef), 3); cad somme sur les channels 
     else:
         innerProd = tf.reduce_sum(tf.multiply(F_x,tf.conj(F_a)), 1, keepdims=True)  # sum(ftIm .* conj(ftRef), 3); cad somme sur les channels 
     # Shape = [  1   1 512 512] pour une image 512*512
     #module_InnerProd = tf.pow(tf.multiply(innerProd,tf.conj(innerProd)),0.5) # replace by tf.abs
     #print(innerProd)
-    if test_version_sup('1.4'):
+    if test_version_tf_sup('1.4'):
         module_InnerProd = tf.complex(tf.abs(innerProd),0.) # Possible with tensorflow 1.4
     else:
         print("You nedd a version of Tensorflow superior to 1.4")
@@ -662,32 +679,32 @@ def get_init_img_wrap(args,output_image_path,image):
     """
     if(not(args.start_from_noise)):
         try:
-            init_img = preprocess(scipy.misc.imread(output_image_path).astype('float32'))
+            init_img = preprocess(imread(output_image_path).astype('float32'))
             if(args.verbose):  print("Use the former image")
         except(FileNotFoundError):
             if(args.verbose): print("Former image not found, use of white noise mixed with the content image as initialization image")
             # White noise that we use at the beginning of the optimization
-            init_img = get_init_noise_img(image_content,args.init_noise_ratio,args.init_range)
+            init_img = get_init_noise_img(image,args.init_noise_ratio,args.init_range)
     elif(args.init =='smooth_grad'):
         if(args.verbose): print("Noisy image generation with a smooth gradient")
         print("Warning this don t take into account init_noise_ratio")
-        init_img = get_init_noise_img_smooth_grad(image_content) # TODO add a ratio for this kind of initialization also
+        init_img = get_init_noise_img_smooth_grad(image) # TODO add a ratio for this kind of initialization also
     elif(args.init=='Gaussian'):
         if(args.verbose): print("Noisy image generation with a Gaussian white noise")
-        init_img = get_init_noise_img_gaussian(image_content,args.init_noise_ratio)
+        init_img = get_init_noise_img_gaussian(image,args.init_noise_ratio)
     elif(args.init=='Uniform'):
         if(args.verbose): print("Noisy image generation init_noise_ratio = ",args.init_noise_ratio)
-        init_img = get_init_noise_img(image_content,args.init_noise_ratio,args.init_range)
+        init_img = get_init_noise_img(image,args.init_noise_ratio,args.init_range)
     elif(args.init=='Cst'):
         if(args.verbose): print("Constante image")
-        _,image_h, image_w, number_of_channels = image_content.shape 
+        _,image_h, image_w, number_of_channels = image.shape 
         noise_img = (127.5*np.ones((image_h, image_w, number_of_channels))).astype('float32')
         init_img = preprocess(noise_img)
     return(init_img)
 
 def get_upScaleOf(namefile,newscale):
     try:
-        init_img = scipy.misc.imread(namefile)
+        init_img = imread(namefile)
         if not(newscale is None):
             init_img = cv2.resize(init_img,(newscale[1],newscale[0]),interpolation=cv2.INTER_CUBIC)
             # Warning ! cv2.resize need w,h whereas in scale it is provide h*w
@@ -704,9 +721,10 @@ def load_img(args,img_name,scale=None):
     the preprocessing
     """
     image_path = args.img_folder + img_name + '.'+args.img_ext
+    print('image_path',image_path)
     new_img_ext = args.img_ext
     try:
-        img = scipy.misc.imread(image_path)  # Float between 0 and 255
+        img = imread(image_path)  # Float between 0 and 255
     except IOError:
         if(args.verbose): print("Exception when we try to open the image, try with a different extension format",str(args.img_ext))
         if(args.img_ext=="jpg"):
@@ -715,12 +733,13 @@ def load_img(args,img_name,scale=None):
             new_img_ext = "jpg"
         try:
             image_path = args.img_folder + img_name+'.' +new_img_ext # Try the new path
-            img = scipy.misc.imread(image_path,mode='RGB')
+            print('image_path2',image_path)
+            img = imread(image_path,mode='RGB')
             if(args.verbose): print("The image have been sucessfully loaded with a different extension than",str(args.img_ext))
         except IOError:
             try:
                 image_path = args.img_folder + img_name # Try the new path
-                img = scipy.misc.imread(image_path,mode='RGB')
+                img = imread(image_path,mode='RGB')
                 if(args.verbose): print("The image have been sucessfully loaded without extension")
             except IOError:
                 if(args.verbose): print("Exception when we try to open the image, we already test the 2 differents extension and without it.")
@@ -919,7 +938,7 @@ def run_synthesis(args):
         # Precomputation of the Gram Matrix :
         
         if ('Gram' in args.loss):
-            if args.MS_Strat in ['Init'] or args.GramLightComput:
+            if (args.MS_Strat in ['Init','Constr']) or args.GramLightComput:
                 if args.verbose: print("In those cases we will not use the precomputed gram matrix")
                 dict_gram = get_Gram_matrix(vgg_layers,image_texture,pooling_type,padding,non_linearity_type,args)
             else:
@@ -982,7 +1001,7 @@ def run_synthesis(args):
                 
             if((args.optimizer=='GD') or (args.optimizer=='adam')):
                 if args.savedIntermediateIm:
-                    raise(NotImplemented) # TODO
+                    raise(NotImplementedError)
                     
                 train = optimizer.minimize(loss_total)
 
@@ -1035,7 +1054,7 @@ def run_synthesis(args):
                 optimizer_kwargs = {'maxiter': args.max_iter,'maxcor': args.maxcor, \
                     'disp': print_disp}
                 # To solve the non retro compatibility of Tensorflow !
-                if test_version_sup('1.4'): 
+                if test_version_tf_sup('1.4'): 
                     bnds = get_lbfgs_bnds(init_img,clip_value_min,clip_value_max,BGR)
                     trainable_variables = tf.trainable_variables()[0]
                     var_to_bounds = {trainable_variables: bnds}
