@@ -20,7 +20,7 @@ def testTexture():
     name_texture = 'TilesOrnate0158_1_S' # Image in size 256*256
     output_img_name = name_texture + '_Gram'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
-        style_img_name=name_texture,loss=['Gram'],output_img_name=output_img_name) 
+        texture_ref_name=name_texture,loss=['Gram'],output_img_name=output_img_name) 
     args = parser.parse_args()
     rs.run_synthesis(args)
     print('End of the texture test with Gram Matrices')
@@ -30,23 +30,23 @@ def testTextureAucorr():
     name_texture = 'TilesOrnate0158_1_S' # Image in size 256*256
     output_img_name = name_texture + '_autocorr'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
-        style_img_name=name_texture,loss=['autocorr'],output_img_name=output_img_name) 
+        texture_ref_name=name_texture,loss=['autocorr'],output_img_name=output_img_name) 
     args = parser.parse_args()
     rs.run_synthesis(args)
     print('End of the autocorr texture test')
   
 def testTextureMSInit():
     parser = get_parser_args()
-    name_texture = 'TexturesCom_TilesOrnate0158_1_seamless_S' # Image in size 1024*1024
+    name_texture = 'TexturesCom_BrickSmallBrown0473_1_M_1024' # Image in size 1024*1024
     output_img_name = name_texture + '_Gram_Spectrum_MSInit'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
-        style_img_name=name_texture,loss=['Gram','spectrum'],
+        texture_ref_name=name_texture,loss=['Gram','spectrum'],
         output_img_name=output_img_name,MS_Strat='MSInit') 
     args = parser.parse_args()
     rs.run_synthesis(args)
     print('End of the autocorr texture test')
 
 if __name__ == '__main__':
-    testTexture()
-    testTextureAucorr()
+    #testTexture()
+    #testTextureAucorr()
     testTextureMSInit()

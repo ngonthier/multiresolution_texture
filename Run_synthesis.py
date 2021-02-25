@@ -69,7 +69,7 @@ def test_version_scipy_sup(version_str):
     return(status)
     
 if test_version_scipy_sup('1.2.0'):
-    from scipy.imageio import imread
+    from imageio import imread
 else:
     from scipy.misc import imread
 
@@ -1098,97 +1098,7 @@ def main():
     parser = get_parser_args()
     args = parser.parse_args()
     run_synthesis(args)
-    
-def main_with_option():
-    parser = get_parser_args()
-    brick = "mesh_texture_surface_2048"
-    ##brick = "mesh_texture_surface_4096"
-    #brick = "lego_1024"
-    brick = "TexturesCom_BrickSmallNew0099_1_seamless_S_1024"
-    ##brick = "StarryNight"
-    ##brick = "TilesOrnate0158_1_S"
-    img_folder = "dataImages2/"
-    img_output_folder = "dataImages2/"
-    #img_folder = "HDImages/"
-    #img_output_folder = "HDImages_output/"
-    image_texture_name = brick
-    content_img_name  = brick
-    max_iter = 20
-    print_iter = 1
-    start_from_noise = 1 # True
-    init_noise_ratio = 1.0 # TODO add a gaussian noise on the image instead a uniform one
-    content_strengh = 0.001
-    optimizer = 'lbfgs'
-    learning_rate = 1 # 10 for adam and 10**(-10) for GD
-    maxcor = 10
-    sampling = 'up'
-    loss = ['texture']
-    #loss = ['texture']
-    saveMS = True
-    #MS_Strat = 'Constr'
-    #MS_Strat = ''
-    MS_Strat = 'Init'
-    eps = 10**(-16)
-    # python run_synthesis.py --texture_ref_name mesh_texture_surface_2048 --print_iter 100 --max_iter 2000 --loss texture --img_folder HDImages/ --img_output_folder HDImages_output --MS_Strat Init --K 0
-    # In order to set the parameter before run the script
-    parser.set_defaults(texture_ref_name=image_texture_name,max_iter=max_iter,img_folder=img_folder,
-        print_iter=print_iter,start_from_noise=start_from_noise,img_output_folder=img_output_folder,
-        content_img_name=content_img_name,init_noise_ratio=init_noise_ratio,
-        content_strengh=content_strengh,optimizer=optimizer,maxcor=maxcor,
-        learning_rate=learning_rate,sampling=sampling,MS_Strat=MS_Strat,loss=loss,saveMS=saveMS,eps=eps)
-    args = parser.parse_args()
-    run_synthesis(args)
-    
-#def main_with_option2():
-    #parser = get_parser_args()
-    #image_texture_name= "StarryNight_Big"
-    #image_texture_name= "StarryNight"
-    #starry = "StarryNight"
-    #marbre = 'GrungeMarbled0021_S'
-    #tile =  "TilesOrnate0158_1_S"
-    #tile2 = "TilesZellige0099_1_S"
-    #peddle = "pebbles"
-    #brick = "BrickSmallBrown0293_1_S"
-    ##D ="D20_01"
-    ##orange = "orange"
-    ##bleu = "bleu"
-    ##glass = "glass"
-    ##damier ='DamierBig_Proces'
-    ##camouflage = 'Camouflage0003_S'
-    ##brick = 'Brick_512_1'
-    ###brick = 'MarbreWhite_1'
-    ###brick = 'Camouflage_1'
-    ##brick = 'OrnamentsCambodia0055_512'
-    #brick = "BrickRound0122_1_seamless_S"
-    #brick = "lego_1024maison"
-    #brick = "lego_1024Ref_256"
-    #output_img_name = 'lego_1024Ref_256_maison_000step'
-    #img_folder = "images/"
-    #img_output_folder = "images/"
-    #image_texture_name = brick
-    #content_img_name  = brick
-    #max_iter = 2000
-    #print_iter = 2000
-    #start_from_noise = 1 # True
-    #init_noise_ratio = 1.0 # TODO add a gaussian noise on the image instead a uniform one
-    #content_strengh = 0.001
-    #optimizer = 'lbfgs'
-    #learning_rate = 1 # 10 for adam and 10**(-10) for GD
-    #maxcor = 20
-    #sampling = 'up'
-    #MS_Strat = 'Init'
-    #loss = ['texture','spectrum']
-    #saveMS = True
-    ##MS_Strat = 'Constr'
-    ##MS_Strat = ''
-    ## In order to set the parameter before run the script
-    #parser.set_defaults(texture_ref_name=image_texture_name,max_iter=max_iter,img_folder=img_folder,
-        #print_iter=print_iter,start_from_noise=start_from_noise,img_output_folder=img_output_folder,
-        #content_img_name=content_img_name,init_noise_ratio=init_noise_ratio,output_img_name=output_img_name,
-        #content_strengh=content_strengh,optimizer=optimizer,maxcor=maxcor,
-        #learning_rate=learning_rate,sampling=sampling,MS_Strat=MS_Strat,loss=loss,saveMS=saveMS)
-    #args = parser.parse_args()
-    #run_synthesis(args)
+
 
 if __name__ == '__main__':
     main() 
