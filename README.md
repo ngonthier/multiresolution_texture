@@ -10,6 +10,68 @@ We introduce a simple multi-resolution framework that consists in using the synt
 
 [arXiv](https://arxiv.org/abs/2008.01808) | [BibTeX](#bibtex) 
 
+
+## Requirements
+You can install the required packages in your local environment by using the rquirements.txt file. 
+This code have been tested with Python 3.6 and [Tensorflow 1.5](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf?hl=fr).
+We advice you to use a [conda](https://conda.io/) environment and the GPU version of Tensorflow.
+Moreover, this code have not been tested with Tensorflow 2.
+
+```
+pip install -r requirements.txt
+```
+
+## Synthesis Texture
+
+### Gatys et al. Texture Synthesis
+
+To synthesis a new texture sample with the [Gatys et al. 2015](https://arxiv.org/abs/1505.07376) model based on the Gram matrices, you can use the following command :
+The -s option is the reference image name, the -o is the output image name. The name of the folder containing the reference image can be change by using the --img_folder option and the output folder with the --img_output_folder one.
+
+
+```
+python Run_synthesis.py -s TilesOrnate0158_1_S -o synthesis --img_folder images --img_output_folder output
+```
+
+### Gatys Multiscale
+
+To use the multiscale strategy you just need to add the --MS_Strat option as shown in the following command:
+```
+python Run_synthesis.py -s TexturesCom_BrickSmallBrown0473_1_M_1024 -o synthesis --MS_Strat Init --K 2
+```
+The --K option is the number of scale to use.
+
+### Using an additional spectrum constraint
+
+The --loss option can be used to add the spectrum contraint (on the input image) in the following way:
+```
+python Run_synthesis.py -s TilesOrnate0158_1_S -o synthesis --loss Gram spectrum --beta_spectrum 100000
+```
+This option must be followed by a list of loss to use. And the --beta_spectrum option is the weighting ratio between the Gram based loss and the spectrum one.
+Without the multi-scale strategy, this method is the [Liu et al. 2016](https://arxiv.org/abs/1605.01141) one.
+
+The Gram + spectrum model can be used in a multi-scale manner:
+```
+python Run_synthesis.py -s TexturesCom_BrickSmallBrown0473_1_M_1024 -o synthesis --loss Gram spectrum --beta_spectrum 100000 --MS_Strat Init --K 2
+```
+
+
+### Autocorrelation of the feature maps
+
+The model based only on the autocorrelation of the feature maps (without Gram matrices) can be used as following:
+```
+python Run_synthesis.py -s TilesOrnate0158_1_S -o synthesis --loss autocorr
+```
+And to use the multiscale pipeline, you just need to use this command:
+```
+python Run_synthesis.py -s TexturesCom_BrickSmallBrown0473_1_M_1024 -o synthesis --loss autocorr --MS_Strat Init --K 2
+```
+
+
+### Other options
+
+Other options are available with this script you can refer to the Arg_Parser.py file such as the optimizer, the number of iterations.
+
 ## BibTeX
 
 ```

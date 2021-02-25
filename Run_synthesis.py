@@ -1086,7 +1086,7 @@ def run_synthesis(args):
             raise 
         finally:
             sess.close()
-            tf.reset_default_graph()
+            tf.compat.v1.reset_default_graph()
             if(args.verbose): 
                 print("Close Sess - End of the global optimization.")
                 tend = time.time()
@@ -1101,7 +1101,5 @@ def main():
 
 if __name__ == '__main__':
     main() 
-    # Command line : python run_synthesis.py --texture_ref_name estampe --print_iter 1000 --max_iter 1000 --loss texture content --HistoMatching
-    #main_with_option()
+    # Command line : python run_synthesis.py --texture_ref_name estampe --print_iter 1000 --max_iter 1000 --loss Gram
     # Use CUDA_VISIBLE_DEVICES='' python ... to avoid using CUDA
-    # Pour update Tensorflow : python3.6 -m pip install --upgrade tensorflow-gpu
