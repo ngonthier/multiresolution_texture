@@ -47,6 +47,6 @@ def testTextureMSInit():
     print('End of the autocorr texture test')
 
 if __name__ == '__main__':
-    #testTexture()
-    #testTextureAucorr()
+    testTexture()
+    testTextureAucorr()
     testTextureMSInit()

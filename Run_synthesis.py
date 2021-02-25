@@ -29,7 +29,7 @@ from shutil import copyfile
 from functools import partial
 import pathlib
 import urllib
-
+from skimage import filters
 
 
 # Name of the 19 first layers of the VGG19
@@ -546,7 +546,6 @@ def get_init_noise_img_smooth_grad(image_content):
     This function return a random initial image with a mean near to the 
     mean value of the content image and with a smooth gradient 
     """
-    from skimage import filters
     _,image_h, image_w, number_of_channels = image_content.shape 
     low = -1
     high = 1
