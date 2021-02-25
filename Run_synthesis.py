@@ -1004,7 +1004,7 @@ def run_synthesis(args):
                     
                 train = optimizer.minimize(loss_total)
 
-                sess.run(tf.global_variables_initializer())
+                sess.run(tf.compat.v1.global_variables_initializer())
                 sess.run(assign_op, {placeholder: init_img})
                             
                 sess.graph.finalize() # To test if the graph is correct
@@ -1061,7 +1061,7 @@ def run_synthesis(args):
                         method='L-BFGS-B',options=optimizer_kwargs)   
                 else:
                     raise(NotImplementedError('You need to have a version of tensorflow superior to 1.4'))   
-                sess.run(tf.global_variables_initializer())
+                sess.run(tf.compat.v1.global_variables_initializer())
                 sess.run(assign_op, {placeholder: init_img})
                             
                 sess.graph.finalize() # To test if the graph is correct

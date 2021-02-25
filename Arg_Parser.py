@@ -36,12 +36,12 @@ def get_parser_args():
     parser.add_argument('--iprint',  type=int,default=0,
         help='Number of iterations between optimizer print statements for the lbfgs algo only. (default %(default)s)')
         
-    parser.add_argument('--print_iter',  type=int,default=0,
+    parser.add_argument('--print_iter',  type=int,default=200,
         help='Number of iterations between optimizer save the image or  print statements for the lbfgs algo only. (default %(default)s)')
         
     # Name of the Images
     parser.add_argument('-o','--output_img_name', type=str, 
-        default='Pastiche',help='Filename of the output image.')
+        default='synthesis',help='Filename of the output image.')
         
     parser.add_argument('-s','--texture_ref_name',  type=str,default='TilesOrnate0158_1_S',
         help='Filename of the texture reference image. It must be a .png image otherwise change the img_ext.')
@@ -81,7 +81,6 @@ def get_parser_args():
     
     parser.add_argument('--clipping_type', type=str,choices=['ImageNet','ImageStyle','ImageStyleBGR'],
         default='ImageStyleBGR',help='Element that we use to compute clip values : ImageNet means, the image style or each channel of the iamge style. (default %(default)s)')  
-    
 
     parser.add_argument('--init_noise_ratio',type=float,default=1.0,
         help='Propostion of the initialization image that is noise : 1 means  100 % of the image is noise. (default %(default)s)')
