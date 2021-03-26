@@ -78,7 +78,7 @@ Other options are available with this script you can refer to the Arg_Parser.py 
 
 The normalizedvgg.mat file is the VGG19 network with the weights normalized by Gatys et al. and it is the [Caffe model](https://github.com/leongatys/DeepTextures) converted in MatConvNet format by us.
 
-This code can also be used with the pretained weights from [Simonyan and Zisserman](https://arxiv.org/abs/1409.1556) can be found [here](http://www.vlfeat.org/matconvnet/models/imagenet-vgg-verydeep-19.mat).
+This code can also be used with the pretained weights from [Simonyan and Zisserman](https://arxiv.org/abs/1409.1556) that can be found [here](http://www.vlfeat.org/matconvnet/models/imagenet-vgg-verydeep-19.mat).
 
 ## BibTeX
 
