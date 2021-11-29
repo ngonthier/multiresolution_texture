@@ -41,7 +41,7 @@ def testTextureMSInit():
     output_img_name = name_texture + '_Gram_Spectrum_MSInit'
     parser.set_defaults(verbose=True,max_iter=max_iter,print_iter=print_iter,\
         texture_ref_name=name_texture,loss=['Gram','spectrum'],
-        output_img_name=output_img_name,MS_Strat='MSInit') 
+        output_img_name=output_img_name,MS_Strat='Init') 
     args = parser.parse_args()
     rs.run_synthesis(args)
     print('End of the autocorr texture test')
