@@ -83,12 +83,14 @@ This code can also be used with the pretained weights from [Simonyan and Zisserm
 ## BibTeX
 
 ```
-@misc{gonthier2020high,
-      title={High resolution neural texture synthesis with long range constraints}, 
-      author={Nicolas Gonthier Esser and Yann Gousseau and Saïd Ladjal},
-      year={2020},
-      eprint={2008.01808},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@article{gonthier2022high,
+  title={High-resolution neural texture synthesis with long-range constraints},
+  author={Gonthier, Nicolas and Gousseau, Yann and Ladjal, Sa{\"\i}d},
+  journal={Journal of Mathematical Imaging and Vision},
+  volume={64},
+  number={5},
+  pages={478--492},
+  year={2022},
+  publisher={Springer}
 }
 ```
